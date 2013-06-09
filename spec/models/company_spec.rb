@@ -1,5 +1,13 @@
 require 'spec_helper'
 
+def check_contact_info(company, test_values, type)
+  test_values.each do |value|
+    company.send(:"#{type}=", value)
+    return false unless company.valid?
+  end
+  true
+end
+
 describe Company do
   let(:company) { FactoryGirl.create(:company) }
 
