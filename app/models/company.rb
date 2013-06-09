@@ -90,8 +90,8 @@ class Company < ActiveRecord::Base
     !self.phone1.blank?
   end
 
-  def latests_jobs
-    jobs.all(:limit => 4, :order=> "id desc")
+  def latest_jobs
+    Job.latest(self).to_a
   end
 
   def formatted_facebook

@@ -242,10 +242,10 @@ describe Company do
       end
     end
 
-    describe '.latests_jobs' do
+    describe '.latest_jobs' do
       context 'When company has no jobs' do
         it 'Returns an empty array' do
-          company.latests_jobs.should be_blank
+          company.latest_jobs.should be_blank
         end
       end
 
@@ -256,12 +256,12 @@ describe Company do
           @job = Job.first
         end
 
-        it 'Returns the four latests jobs' do
-          company.latests_jobs.should eql(@jobs)
+        it 'Returns the four latest jobs' do
+          company.latest_jobs.should eq(@jobs)
         end
 
         it 'Does not return older jobs' do
-          company.latests_jobs.should_not include(@job)
+          company.latest_jobs.should_not include(@job)
         end
       end
     end

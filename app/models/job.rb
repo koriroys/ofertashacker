@@ -19,7 +19,8 @@ class Job < ActiveRecord::Base
   metropoli_for :city
   metropoli_for :country
 
-  scope   :ordered, order('id DESC')
+  scope :ordered, order('id DESC')
+  scope :latest, ->(company) { where(company_id: company.id).limit(4).ordered }
 
   def self.filter_it(filters={})
     results = Job.includes(:company)
