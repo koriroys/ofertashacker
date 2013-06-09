@@ -25,14 +25,14 @@ class Job < ActiveRecord::Base
     results = Job.includes(:company)
     unless filters.blank?
       results = results.where(FILTERS.collect do |filter|
-        %|jobs.#{filter} = 't'| if eval(filters[filter.to_sym]) 
+        %|jobs.#{filter} = 't'| if eval(filters[filter.to_sym])
       end.compact.join(' OR '))
     end
     results
   end
 
   def self.no_repeat(jobs=[])
-    unless jobs.blank? 
+    unless jobs.blank?
       where(sanitize_sql("jobs.id NOT IN (#{jobs.join(',')})"))
     end
   end
@@ -73,14 +73,14 @@ class Job < ActiveRecord::Base
     extra_skill.split(',')
   end
 
-  def formated_description
+  def formatted_description
     self.description.gsub(/^h2\./,'h3.').gsub(/^h1\./,'h2.')
   end
 
   def latest_required_skills
     required_skills.all(:limit => 4, :order => "id desc" )
   end
-  
+
   def to_s
     title
   end
@@ -88,7 +88,7 @@ class Job < ActiveRecord::Base
   def origin
     city_name || country_name || city2
   end
-  
+
   def has_logo
     logo.file?
   end
@@ -96,12 +96,12 @@ class Job < ActiveRecord::Base
   def logo_url
     logo.url(:thumb)
   end
-  
+
   def as_json(args={})
     args ||= {}
     super(args.merge!(:methods =>[:to_param, :origin, :logo_url, :has_logo] ,:include => {:company => {:only => [:title]}}))
   end
-  
+
   private
 
   def logo

@@ -14,9 +14,7 @@
     <% end %>
     </ul>
   </div>
-
   <div id="logoperfil">
-    
   </div>
   <div class="generalForm">
     <div id="left">
@@ -37,7 +35,7 @@
     <div id="right">
       <h1><%= @company.title %></h1>
       <div id="job_description">
-        <p><%= @company.description ? RedCloth.new(@company.formated_description).to_html.html_safe : "" %></p>
+        <p><%= @company.description ? RedCloth.new(@company.formatted_description).to_html.html_safe : "" %></p>
       </div>
       <div class="clear"></div>
       <% unless @company.jobs.blank? %>

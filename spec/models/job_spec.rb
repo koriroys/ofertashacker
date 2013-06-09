@@ -42,9 +42,9 @@ describe Job do
         @job.should_not be_valid
       end
     end
-    
+
   end
- 
+
   context 'Class methods' do
     describe '.filter_it' do
       context 'When filters are blank' do
@@ -62,13 +62,13 @@ describe Job do
           @remote = FactoryGirl.create(:job, :full_time => false, :part_time => false, :flexible => false, :remote => true, :company => Company.last)
           @filters = {:full_time=>"true", :flexible=>"true", :part_time=>"true", :remote=>"true"}
         end
-        
+
         context 'When all filters are checked' do
           it 'Returns all jobs' do
             Job.filter_it(@filters).should == (Job.all)
           end
         end
-        
+
         context 'When full time is unchecked' do
           before do
             @filters.merge!({:full_time => "false"})
@@ -85,7 +85,7 @@ describe Job do
           it 'Returns all jobs that does not have only part time' do
             Job.filter_it(@filters).should == ([@full_time, @flexible, @remote])
           end
-          
+
         end
         context 'When flexible is unchecked' do
           before do
@@ -94,7 +94,7 @@ describe Job do
           it 'Returns all jobs that does not have only flexible' do
             Job.filter_it(@filters).should == ([@full_time, @part_time, @remote])
           end
-          
+
         end
         context 'When remote is unchecked' do
           before do
@@ -103,7 +103,7 @@ describe Job do
           it 'Returns all jobs that does not have only remote' do
             Job.filter_it(@filters).should == ([@full_time, @part_time, @flexible])
           end
-          
+
         end
       end
 
@@ -130,22 +130,22 @@ describe Job do
         end
       end
     end
- 
+
     describe '.no_repeat' do
       before do
         @job1 = FactoryGirl.create(:job)
         @job2 = FactoryGirl.create(:job)
         @job_array = [@job2.id, @job.id]
       end
-      
+
       context 'With an empty array' do
         it 'Returns nil with an empty array' do
           Job.no_repeat.should be_nil
         end
       end
-      
+
       context 'With at least one job id' do
-        
+
         it 'Does not return the jobs in the array' do
           Job.no_repeat(@job_array).should_not include([@job2, @job])
         end
@@ -176,10 +176,10 @@ describe Job do
         @job.to_param.should eql("#{@job.id}-ruby-programmer-ninja")
       end
     end
-    
+
     describe '.at_least_one_type' do
       context 'Without any job type' do
-        
+
         before do
           @job.update_attributes(:full_time => false, :part_time => false, :flexible => false, :remote => false)
         end
@@ -187,9 +187,9 @@ describe Job do
           @job.at_least_one_type.should be_false
         end
       end
-      
+
       context 'With at least a job type' do
-        
+
         before do
           @job.update_attributes(:full_time => true)
         end
@@ -197,9 +197,9 @@ describe Job do
           @job.at_least_one_type.should be_true
         end
       end
-      
+
     end
-    
+
     describe 'format_extra_skills' do
       before do
         @job.update_attributes(:extra_skill => "first,second,third")
@@ -208,22 +208,22 @@ describe Job do
         @job.format_extra_skills.should eql(['first','second','third'])
       end
     end
-    
-    describe '.formated_description' do
+
+    describe '.formatted_description' do
       before do
         @job.update_attributes(:description => "h1. Title \n Description \n\nh2. Sub Title Even more description")
       end
-      
+
       it 'Converts h1 textile tags to h2' do
-        @job.formated_description.should_not include("h1.")
+        @job.formatted_description.should_not include("h1.")
       end
 
       it 'Converts h2 textile tags to h3' do
-        @job.formated_description.should include("h2. Title")
-        @job.formated_description.should include("h3. Sub Title")
-        @job.formated_description.should_not include("h2. Sub Title")
+        @job.formatted_description.should include("h2. Title")
+        @job.formatted_description.should include("h3. Sub Title")
+        @job.formatted_description.should_not include("h2. Sub Title")
       end
     end
   end
-  
+
 end

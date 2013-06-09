@@ -69,7 +69,7 @@
         <p>
 
         <div id="job_description">
-          <p><%= RedCloth.new(@job.formated_description,[
+          <p><%= RedCloth.new(@job.formatted_description,[
               :filter_html,
               :filter_styles,
               :filter_classes,
@@ -83,7 +83,7 @@
     </div>
 
   </div>
-       
+
 <% content_for :bottom do %>
 	<div class="overlay contact" id="contact_trigger">
 	  <%= render :partial => 'contact_company', :locals=>{:job=>@job}%>

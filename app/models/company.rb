@@ -1,20 +1,20 @@
 class Company < ActiveRecord::Base
-  
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :jobs, :dependent => :destroy
-    
-  validates :title, :presence => true, :uniqueness => true
-  validates_format_of :website, :with => /^(http:\/\/(www\.)?|(www\.)?)\w+\.\D{2,}.*$/i, :on => :update, :if => :website?
-  validates_format_of :contact_email, :with => /^\w(\w|[.-])+@\w+\.\w{2,}$/i, :on => :update, :if => :contact_email?
-  validates_format_of :facebook, :with =>/^(\/?\w+|((http:\/\/(www\.)?|(www\.)?)facebook.com\/\w+))$/i, :on => :update, :if => :facebook?
-  validates_format_of :twitter, :with => /^((\/|@)?\w+|((http:\/\/(www\.)?|(www\.)?)twitter.com\/\w+))$/i, :on => :update, :if => :twitter?
 
-  validates_attachment_content_type :logo, 
-                                    :content_type => ['image/jpg','image/jpeg', 
+  validates :title, :presence => true, :uniqueness => true
+  validates_format_of :website, :with => /^(http:\/\/(www\.)?|(www\.)?)\w+\.\D{2,}.*$/i, :on => :update, :if => :has_website?
+  validates_format_of :contact_email, :with => /^\w(\w|[.-])+@\w+\.\w{2,}$/i, :on => :update, :if => :has_contact_email?
+  validates_format_of :facebook, :with => /^(\/?\w+|((http:\/\/(www\.)?|(www\.)?)facebook.com\/\w+))$/i, :on => :update, :if => :has_facebook?
+  validates_format_of :twitter, :with => /^((\/|@)?\w+|((http:\/\/(www\.)?|(www\.)?)twitter.com\/\w+))$/i, :on => :update, :if => :has_twitter?
+
+  validates_attachment_content_type :logo,
+                                    :content_type => ['image/jpg', 'image/jpeg',
                                                       'image/png', 'image/gif']
 
   attr_accessible :email, :password, :password_confirmation,
@@ -25,7 +25,7 @@ class Company < ActiveRecord::Base
 
 	metropoli_for :city
   scope :members, where(:role => "member")
-  
+
   DEFAULT_LOGO_ROUTE = "/images/shareIcon.png"
 
   has_attached_file :logo, :styles => {:list => "150x100", :medium => "200x100>", :thumb => "130x35>"},
@@ -57,11 +57,11 @@ class Company < ActiveRecord::Base
   def admin?
     self.role == "admin"
   end
-  
+
   def member?
     self.role == "member"
   end
-  
+
   def logo_url
     if Rails.env == 'production'
       self.logo.url
@@ -70,31 +70,31 @@ class Company < ActiveRecord::Base
     end
   end
 
-  def facebook?
+  def has_facebook?
     !self.facebook.blank?
   end
 
-  def website?
+  def has_website?
     !self.website.blank?
   end
 
-  def twitter?
+  def has_twitter?
     !self.twitter.blank?
   end
-  
-  def contact_email?
+
+  def has_contact_email?
     !self.contact_email.blank?
   end
-  
-  def phone1?
+
+  def has_phone1?
     !self.phone1.blank?
   end
-  
+
   def latests_jobs
     jobs.all(:limit => 4, :order=> "id desc")
   end
 
-  def formated_facebook
+  def formatted_facebook
     start = 0
     if (self.facebook.match(/(^http:\/\/(www\.)?)facebook.com/i))
       start = self.facebook[7..-1].index('/') + self.facebook.index('/') + 3
@@ -118,7 +118,7 @@ class Company < ActiveRecord::Base
     return "facebook.com/#{self.facebook[start..-1]}"
   end
 
-  def formated_twitter
+  def formatted_twitter
     start = 0
     if (self.twitter.match(/(^http:\/\/(www\.)?)twitter.com/i))
       start = self.twitter[7..-1].index('/') + self.twitter.index('/') + 3
@@ -146,8 +146,7 @@ class Company < ActiveRecord::Base
     return "@#{self.twitter[start..-1]}"
   end
 
-  def formated_website
-    start = 0
+  def formatted_website
     if (self.website.match(/^http:\/\/(www\.)?\w+\.\w+.*/i))
       return self.website
     elsif (self.website.match(/^(www\.)?\w+\.\w+.*/i))
@@ -156,8 +155,8 @@ class Company < ActiveRecord::Base
       return self.website
     end
   end
-  
-  def formated_description
+
+  def formatted_description
     self.description.gsub(/^h2./,'h3.').gsub(/^h1./,'h2.')
   end
 
@@ -168,7 +167,7 @@ class Company < ActiveRecord::Base
 
   def origin
     if city.present?
-      city_name 
+      city_name
     else
       city2
     end

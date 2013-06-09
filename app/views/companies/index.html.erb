@@ -23,14 +23,14 @@
 	        <span>
 	        	<h2><%= link_to truncate(company.title, :length =>  25), company_path(company) %></h2>
             <% unless company.origin.blank?%><p><%= "En #{company.origin}" %></p><%end%>
-            <% if company.website? %>
-              <%= link_to "#{truncate(company.website, :length => 50)}", (company.formated_website), :target => :_blank%>
+            <% if company.has_website? %>
+              <%= link_to "#{truncate(company.website, :length => 50)}", (company.formatted_website), :target => :_blank%>
             <% end %><br />
-		        <% if company.twitter?%>
-		          <%= link_to "#{truncate(company.twitter_text, :length => 50)}", (company.formated_twitter), :target => :blank%><br />
+		        <% if company.has_twitter? %>
+              <%= link_to "#{truncate(company.twitter_text, :length => 50)}", (company.formatted_twitter), :target => :blank%><br />
 		        <%end%>
-		        <% if company.facebook?%>
-              <%= link_to "#{truncate(company.facebook_text, :length => 50)}", (company.formated_facebook), :target => :blank%> 
+            <% if company.has_facebook? %>
+              <%= link_to "#{truncate(company.facebook_text, :length => 50)}", (company.formatted_facebook), :target => :blank%> 
 		          <br />
 		        <%end%>
 	        </span>

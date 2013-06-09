@@ -16,7 +16,7 @@ Feature: Admin Actions
     And I follow "Empresas"
     Then I should not see "Company 1"
     Then I should see "Company 2"
-    
+
   Scenario: I can delete my company
     And I am on the root page
     When I follow "Perfil"
