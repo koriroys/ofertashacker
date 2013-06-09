@@ -6,7 +6,6 @@ if Rails.env.development? || Rails.env.test?
 end
 
 Innsights.setup do
-
   user Company do
     display :title
   end
