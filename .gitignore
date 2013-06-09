@@ -43,3 +43,4 @@ rerun.txt
 .rvmrc
 .sass-cache/
 .rbenv-version
+Procfile.local
